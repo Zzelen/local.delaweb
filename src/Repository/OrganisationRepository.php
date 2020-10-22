@@ -47,4 +47,13 @@ class OrganisationRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findOneByOrganisationName($organisation)
+    {
+        return $this->createQueryBuilder('Organisation')
+            ->where('Organisation.name = :name')
+            ->setParameter(':name', $organisation)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

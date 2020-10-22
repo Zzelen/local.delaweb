@@ -19,7 +19,7 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="integer", unique=true)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $phone;
 
@@ -45,21 +45,21 @@ class User implements UserInterface
     private $surname;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $invited_by;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Organisation::class, inversedBy="users")
      */
-    private $organisation_id;
+    private $organisation;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class)
+     */
+    private $invited;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getPhone(): ?int
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
@@ -156,26 +156,26 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getInvitedBy(): ?string
+    public function getOrganisation(): ?Organisation
     {
-        return $this->invited_by;
+        return $this->organisation;
     }
 
-    public function setInvitedBy(?string $invited_by): self
+    public function setOrganisation(?Organisation $organisation): self
     {
-        $this->invited_by = $invited_by;
+        $this->organisation = $organisation;
 
         return $this;
     }
 
-    public function getOrganisationId(): ?Organisation
+    public function getInvited(): ?self
     {
-        return $this->organisation_id;
+        return $this->invited;
     }
 
-    public function setOrganisationId(?Organisation $organisation_id): self
+    public function setInvited(?self $invited): self
     {
-        $this->organisation_id = $organisation_id;
+        $this->invited = $invited;
 
         return $this;
     }
