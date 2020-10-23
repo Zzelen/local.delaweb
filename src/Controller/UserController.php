@@ -8,7 +8,9 @@ use App\Entity\Organisation;
 use App\Entity\User;
 use App\Services\UserService;
 use App\Services\Validation\ValidationName;
+use App\Services\Validation\ValidationOrganisation;
 use App\Services\Validation\ValidationPassword;
+use App\Services\Validation\ValidationRepeatedPassword;
 use App\Services\Validation\ValidationPhone;
 use App\Services\Validation\ValidationSurname;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -127,14 +129,26 @@ class UserController extends AbstractController
             $status = false;
         }
 
+        $validationPassword = new ValidationPassword($params['password']);
+        if ($validationPassword->isValid() === false) {
+            $result['password'] = $validationPassword->getMessage();
+            $status = false;
+        }
+
         $passwords = [
             'password' => $params['password'],
             'repeatedPassword' => $params['repeatedPassword']
         ];
 
-        $validationPassword = new ValidationPassword($passwords);
-        if ($validationPassword->isValid() === false) {
-            $result['password'] = $validationPassword->getMessage();
+        $validationRepeatedPassword = new ValidationRepeatedPassword($passwords);
+        if ($validationRepeatedPassword->isValid() === false) {
+            $result['repeatedPassword'] = $validationRepeatedPassword->getMessage();
+            $status = false;
+        }
+
+        $validationOrganisation = new ValidationOrganisation($params['organisation']);
+        if ($validationOrganisation->isValid() === false) {
+            $result['organisation'] = $validationOrganisation->getMessage();
             $status = false;
         }
 

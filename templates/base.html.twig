@@ -9,22 +9,22 @@
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
-<div class="header">
-    <h1>Header</h1>
-    <p>Тестовое задание для Delaweb</p>
+<div class="header fixed-top">
+    <a href="{{ path('app_main_index') }}"><h2>Delaweb</h2></a>
+    <p>Тестовое задание</p>
 </div>
 
-<div class="topnav">
-    <a href="#">Link</a>
-    <a href="#">Link</a>
-    <a href="#">Link</a>
-</div>
+{#Навбар#}
+{#<div class="topnav">#}
+{#    <a href="#">Link</a>#}
+{#    <a href="#">Link</a>#}
+{#    <a href="#">Link</a>#}
+{#</div>#}
 
 <div class="body-row">
     {% block left_side %}
         <div class="column side">
-            <h2>Side</h2>
-            <p>Здесь будеть левый сайдбар.</p>
+
         </div>
     {% endblock %}
 
@@ -34,8 +34,7 @@
 
     {% block right_side %}
         <div class="column side">
-            <h2>Side</h2>
-            <p>Здесь будет правый сайдбар.</p>
+
         </div>
     {% endblock %}
 </div>

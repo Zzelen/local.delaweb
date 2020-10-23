@@ -4,15 +4,14 @@
 namespace App\Services\Validation;
 
 
-class ValidationPassword extends AbstractValidation
+class ValidationOrganisation extends AbstractValidation
 {
     public function validate()
     {
         if (empty($this->param)) {
-            return $this->message = 'Пароль не может быть пустым';
+            return $this->message = 'Организация не может быть пустой';
         }
         return $this->isValid = true;
     }
-
 
 }

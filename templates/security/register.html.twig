@@ -2,72 +2,111 @@
 
 {% block content %}
     <div class="column middle">
-        <form id="createUserForm" action="" method="POST">
-            <p>Регистрация нового пользователя</p>
-            <div class="">
-                <label>Имя: </label>
-                <input type="text" name="name">
-            </div>
-            <div class="">
-                <label>Фамилия: </label>
-                <input type="text" name="surname">
-            </div>
-            <div class="">
-                <label>Номер телефона: </label>
-                <input type="number" name="phone">
-            </div>
-            <div class="">
-                <label>Кто Вас приласил: </label>
-                <select name="invited">
-                    {% for user in users %}
-                        <option value="{{ user.id }}">{{ user.surname }} {{ user.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="">
-                <label>Организация: </label>
-                <input type="text" name="organisation">
-            </div>
-            <div class="">
-                <label>Придумайте пароль: </label>
-                <input type="password" name="password">
-            </div>
-            <div class="">
-                <label>Подтвердите пароль: </label>
-                <input type="password" name="repeatedPassword">
-            </div>
-            <div>
-                <input id="saveButton" class="btn btn-primary" type="button" name="saveButton" value="Сохранить">
-            </div>
-            <div>
-                <a href="{{ path('app_login') }}" class="btn btn-danger">
-                    Отменить
-                </a>
-            </div>
-        </form>
+        <div class="row justify-content-center align-items-center">
+            <form id="createUserForm" class="col-md-8" action="" method="POST">
+                <h5 class="form-group">Регистрация нового пользователя</h5>
+                <div class="form-group">
+                    <label>Имя: </label>
+                    <input class="form-control" type="text" name="name">
+                </div>
+                <div class="form-group">
+                    <label>Фамилия: </label>
+                    <input class="form-control" type="text" name="surname">
+                </div>
+                <div class="form-group">
+                    <label>Номер телефона: </label>
+                    <input class="form-control" type="number" name="phone">
+                    <small class="form-text text-muted">Введите телефон без пробелов и символов</small>
+                </div>
+                <div class="form-group">
+                    <label>Кто Вас приласил: </label>
+                    <select class="custom-select" name="invited">
+                        <option selected disabled value="">Кто Вас пригласил?</option>
+                        {% for user in users %}
+                            <option class="form-control"
+                                    value="{{ user.id }}">{{ user.surname }} {{ user.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Организация: </label>
+                    <input class="form-control" type="text" name="organisation">
+                </div>
+                <div class="">
+                    <label>Придумайте пароль: </label>
+                    <input class="form-control" type="password" name="password">
+                </div>
+                <div class="form-group">
+                    <label>Подтвердите пароль: </label>
+                    <input class="form-control" type="password" name="repeatedPassword">
+                </div>
+                <div class="form-group">
+                    <input id="saveButton" class="btn btn-primary" type="button" name="saveButton" value="Сохранить">
+                </div>
+                <div class="form-group">
+                    <a href="{{ path('app_login') }}" class="btn btn-danger">
+                        Отменить
+                    </a>
+                </div>
+            </form>
+        </div>
+
     </div>
 {% endblock %}
 
 {% block javascripts %}
     <script class="javascript">
+        let $saveUserButton = $("#saveButton");
+        let $form = $("#createUserForm");
+
+        $form.find('input').each(function () {
+            $(this).blur(function () {
+                if ($(this).val() === '') {
+                    $(this).addClass('is-invalid');
+                    let $feedback = "<small class=\"invalid-feedback\">Заполните поле</small>";
+                    let $parent = $(this).parent();
+                    $parent.append($feedback);
+                }
+            });
+        });
+
+
+        $form.find('input').each(function () {
+            $(this).focus(function () {
+                $(this).removeClass('is-invalid');
+                $(this).parent().find($(".invalid-feedback")).remove();
+            });
+        });
+
 
         $(function () {
-            let $saveUserButton = $("#saveButton");
-            let $form = $("#createUserForm")
-
             $saveUserButton.on('click', function () {
                 let $data = $form.serialize();
                 $.post('{{ path('app_user_create') }}', $data, function (response) {
                     if (response.success !== true) {
-                        alert('gg');
+                        let $errorMsg = response.errorMsg;
+
+                        $.each($errorMsg, function (key, value) {
+                            let $feedback = "<small class=\"invalid-feedback\">" + value + "</small>";
+                            let $elem = $('input[name=' + key + ']');
+
+                            $elem.removeClass('is-invalid');
+                            $elem.parent().find($(".invalid-feedback")).remove();
+
+                            if (value !== '') {
+                                $elem.addClass('is-invalid');
+                                let parent = $elem.parent();
+                                parent.append($feedback);
+                            }
+
+                        });
+
                     } else {
-                        window.location.href = "{{ path('app_main_index') }}";
+                        window.location.href = "{{ path('app_login') }}";
                     }
                 }, 'json');
-            })
-        })
-
-
+            });
+        });
 
 
     </script>
