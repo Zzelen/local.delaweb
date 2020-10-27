@@ -1,67 +1,84 @@
 {% extends 'base.html.twig' %}
-{% block title %}Регистрация{% endblock %}
+{% block title%}Профиль{% endblock %}
 
 {% block content %}
+
     <div class="column middle">
         <div class="row justify-content-center align-items-center">
-            <form id="createUserForm" class="col-md-6" action="" method="POST">
-                <h5 class="form-group text-center">Регистрация нового пользователя</h5>
+            <form id="saveUserForm" class="col-md-6" action="" method="POST">
+                <h5 class="form-group text-center">Изменение личных данных</h5>
                 <div class="form-group">
                     <label>Имя: </label>
-                    <input class="form-control" type="text" name="name">
+                    <input class="form-control" type="text" name="name"
+                           value="{{ user.name }}">
                 </div>
                 <div class="form-group">
                     <label>Фамилия: </label>
-                    <input class="form-control" type="text" name="surname">
+                    <input class="form-control" type="text" name="surname"
+                           value="{{ user.surname }}">
                 </div>
                 <div class="form-group">
                     <label>Номер телефона: </label>
-                    <input class="form-control" type="number" name="phone">
+                    <input class="form-control" type="number" name="phone"
+                           value="{{ user.phone }}">
                     <small class="form-text text-muted">От 6 до 15 цифр без пробелов и символов</small>
                 </div>
                 <div class="form-group">
                     <label>Кто Вас приласил: </label>
                     <select class="custom-select" name="invited">
-                        <option selected disabled value="">Кто Вас пригласил?</option>
+                        <option selected
+                                value="{{ user.invited.id|default('') }}">{{ user.invited.surname|default('') }} {{ user.invited.name|default('') }}</option>
                         {% for user in users %}
+                            {% if user.id != app.user.id and user.id != app.user.invited.id %}
                             <option class="form-control"
                                     value="{{ user.id }}">{{ user.surname }} {{ user.name }}</option>
+                            {% endif %}
                         {% endfor %}
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Организация: </label>
-                    <input class="form-control" type="text" name="organisation">
+                    <input class="form-control" type="text" name="organisation"
+                           value="{{ user.organisation.name|default('') }}">
                 </div>
-                <div class="form-group">
-                    <label>Придумайте пароль: </label>
-                    <input class="form-control" type="password" name="password">
-                </div>
-                <div class="form-group">
-                    <label>Подтвердите пароль: </label>
-                    <input class="form-control" type="password" name="repeatedPassword">
-                </div>
+
                 <div class="form-row form-group justify-content-center">
                     <div class="col-md-3">
                         <input id="saveButton" class="btn btn-primary form-control" type="button" name="saveButton" value="Сохранить">
                     </div>
                     <div class="col-md-3">
-                        <a href="{{ path('app_login') }}" class="btn btn-danger form-control">
+                        <a href="{{ path('app_user_profile') }}" class="btn btn-danger form-control">
                             Отменить
                         </a>
                     </div>
                 </div>
-
             </form>
         </div>
-
     </div>
+
+    <div id="myModal" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog"
+         aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header justify-content-center">
+                    <h5 class="modal-title" id="exampleModalLabel">Ура!</h5>
+                </div>
+                <div class="modal-body text-success">
+                    Изменения успешно сохранены!
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block javascripts %}
     <script class="javascript">
         let $saveUserButton = $("#saveButton");
-        let $form = $("#createUserForm");
+        let $form = $("#saveUserForm");
 
         $form.find('input').each(function () {
             $(this).blur(function () {
@@ -86,7 +103,7 @@
         $(function () {
             $saveUserButton.on('click', function () {
                 let $data = $form.serialize();
-                $.post('{{ path('app_user_create') }}', $data, function (response) {
+                $.post('{{ path('app_user_profile') }}', $data, function (response) {
                     if (response.success !== true) {
                         let $errorMsg = response.errorMsg;
 
@@ -106,14 +123,12 @@
                         });
 
                     } else {
-                        window.location.href = "{{ path('app_login') }}";
+                        $('#myModal').modal('show')
                     }
                 }, 'json');
             });
         });
 
-
     </script>
-
 
 {% endblock %}

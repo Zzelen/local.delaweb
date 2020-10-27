@@ -11,13 +11,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class MainController extends AbstractController
 {
     /**
-     * @return array
-     * @Template()
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      * @Route ("/")
      */
     public function indexAction()
     {
-        return [];
+        return $this->redirectToRoute('app_login');
     }
 
 }

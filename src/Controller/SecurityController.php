@@ -18,14 +18,15 @@ class SecurityController extends AbstractController
         $this->userService = $userService;
     }
 
+
     /**
      * @Route("/login", name="app_login")
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-//         if ($this->getUser()) {
-//             return $this->redirectToRoute('app_main_index');
-//         }
+         if ($this->getUser()) {
+             return $this->redirectToRoute('app_user_profile');
+         }
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -45,12 +46,16 @@ class SecurityController extends AbstractController
 
 
     /**
-     * @return array
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      * @Template()
      * @Route ("/register")
      */
     public function registerAction()
     {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_user_profile');
+        }
+
         $users = $this->userService->getUsers();
 
         return [

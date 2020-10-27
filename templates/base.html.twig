@@ -8,18 +8,20 @@
     <link href="{{ asset('assets/css/styles.css') }}" rel="stylesheet" type="text/css">
     {% block stylesheets %}{% endblock %}
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 <div class="header fixed-top">
-    <a href="{{ path('app_main_index') }}"><h2>Delaweb</h2></a>
-    <p>Тестовое задание</p>
+    <a class="main-header h2" href="{{ path('app_login') }}">Delaweb</a>
+
+    {# Навбар #}
+    {% if app.user %}
+        <div class="topnav">
+            <a href="{{ path('app_logout') }}">Выйти</a>
+            <div>Вы авторизованы как: {{ app.user.surname }} {{ app.user.name }}</div>
+        </div>
+    {% endif %}
 </div>
 
-{#Навбар#}
-{#<div class="topnav">#}
-{#    <a href="#">Link</a>#}
-{#    <a href="#">Link</a>#}
-{#    <a href="#">Link</a>#}
-{#</div>#}
+
 
 <div class="body-row">
     {% block left_side %}
@@ -40,9 +42,10 @@
 </div>
 
 {% block footer %}
-    <footer class="footer">
-        <p>Footer</p>
-    </footer>
+        <footer class="mt-auto text-center">
+            <p>Copyright © 2020</p>
+        </footer>
+
 {% endblock %}
 
 <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="

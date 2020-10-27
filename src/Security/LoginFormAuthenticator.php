@@ -71,7 +71,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
         if (!$user) {
             // fail authentication with a custom error
-            throw new CustomUserMessageAuthenticationException('Phone could not be found.');
+            throw new CustomUserMessageAuthenticationException('Такого пользователя не существует.');
         }
 
         return $user;
@@ -100,7 +100,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 //        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
 
         // redirect to some "app_homepage" route - of wherever you want
-        return new RedirectResponse($this->urlGenerator->generate('app_main_index'));
+        return new RedirectResponse($this->urlGenerator->generate('app_user_profile'));
     }
 
     protected function getLoginUrl()
