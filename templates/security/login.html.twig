@@ -3,9 +3,9 @@
 {% block title %}Авторизация{% endblock %}
 
 {% block content %}
-    <div class="column middle">
+    <div class="login-page">
         <div class="row justify-content-center">
-            <form method="post" class="col-6 align-middle">
+            <form method="post" class="col-6">
                 {% if error %}
                     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                 {% endif %}
@@ -48,9 +48,15 @@
                 </div>
 
 
-                <button class="btn btn-lg btn-primary" type="submit">
-                    Войти
-                </button>
+                <div class="form-row justify-content-md-center">
+                    <div class="col-5">
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">
+                            Войти
+                        </button>
+                    </div>
+
+                </div>
+
             </form>
         </div>
     </div>

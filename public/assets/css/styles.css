@@ -73,3 +73,14 @@
     top: 150px;
 }
 
+.login-page {
+    background-color: white;
+    right: 25%;
+    top: 25%;
+    width: 50%;
+    margin: auto;
+    text-align: center;
+    position: fixed;
+}
+
+
